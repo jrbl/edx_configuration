@@ -1,0 +1,20 @@
+- name: Basic certs/util setup on jrbl's sandbox
+  #hosts: ip-10-0-10-19.us-west-1.compute.internal
+  hosts: ip-10-0-31-94.us-west-1.compute.internal
+  sudo: True
+  gather_facts: True
+  vars:
+    # this indicates the path to site-specific (with precedence)
+    # things like nginx template files
+    secure_dir: '../../../edx-secret/ansible'
+    local_dir:  '{{secure_dir}}/local'
+    migrate_db: "no"
+  vars_files:
+    - "roles/edxapp/defaults/main.yml"
+    - "{{ secure_dir }}/vars/edxapp_stage_vars.yml"
+    - "{{ secure_dir }}/vars/edxapp_stage_users.yml"
+    - "{{ secure_dir }}/vars/certs_stage_vars.yml"
+  roles:
+    - supervisor
+    - role: certs
+      tags: certs

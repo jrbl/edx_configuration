@@ -6,6 +6,9 @@
     src=edxapp_env.j2 dest={{ edxapp_app_dir }}/edxapp_env
     owner={{ edxapp_user }}  group={{ common_web_user }}
     mode=0644
+  tags:
+  - deploy
+  - certs
 
 # Optional auth for git
 - name: create ssh script for git (not authenticated)
@@ -56,7 +59,7 @@
   - "restart edxapp"
   - "restart edxapp_workers"
 
-- name: checkout theme
+- name: checkout local theme
   git: >
     dest={{ edxapp_app_dir }}/themes/{{edxapp_theme_name}} repo={{edxapp_theme_source_repo}} version={{edxapp_theme_version}}
     accept_hostkey=yes

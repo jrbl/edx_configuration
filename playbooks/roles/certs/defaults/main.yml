@@ -35,7 +35,7 @@ CERTS_LOCAL_PRIVATE_KEY: "example-private-key.txt"
 
 # This defaults to the public certificates repo which is
 # used for open-edx
-CERTS_REPO: "https://github.com/edx/read-only-certificate-code"
+CERTS_REPO: "https://github.com/edx/edx-certificates.git"
 CERTS_NGINX_PORT: 18090
 CERTS_WEB_ROOT: "{{ certs_data_dir }}/www-data"
 CERTS_URL: "http://localhost:{{ CERTS_NGINX_PORT }}"
@@ -53,6 +53,15 @@ CERTS_TEMPLATE_DATA_DIR: 'template_data'
 # gpg --export-ownertrust
 CERTS_OWNER_TRUST: "A9F9EAD11A0A6E7E5A037BDC044089B6FEF8D954:6:\n"
 
+# If no organization can be found, use this as the certifying organization
+CERTS_DEFAULT_ORG: "Default Organization"
+CERTS_LOGGING_ENV: ""
+CERTS_LOCAL_FILENAME: "Certificate.pdf"
+CERTS_S3_VERIFY_PATH: "cert"
+CERTS_LABEL_SINGULAR: "certificate"
+CERTS_LABEL_PLURAL: "certificates"
+
+
 ########## Internal role vars below
 
 certs_user: certs
@@ -67,10 +76,10 @@ certs_git_identity: "{{ certs_app_dir }}/certs-git-identity"
 certs_requirements_file: "{{ certs_code_dir }}/requirements.txt"
 certs_version: 'master'
 certs_gpg_dir: "{{ certs_app_dir }}/gnupg"
+certs_template_dir: "{{ certs_app_dir }}/templates"
 certs_env_config:
-  # CERTS_DATA is legacy, not used
-  CERT_DATA: {}
   QUEUE_NAME: "certificates"
+  DEFAULT_ORG: $CERTS_DEFAULT_ORG
   QUEUE_URL: $CERTS_QUEUE_URL
   CERT_BUCKET: $CERTS_BUCKET
   # gnupg signing key
@@ -82,8 +91,13 @@ certs_env_config:
   CERT_WEB_ROOT: $CERTS_WEB_ROOT
   COPY_TO_WEB_ROOT: $CERTS_COPY_TO_WEB_ROOT
   S3_UPLOAD: $CERTS_S3_UPLOAD
+  S3_VERIFY_PATH: $CERTS_S3_VERIFY_PATH
   CERT_VERIFY_URL: $CERTS_VERIFY_URL
-  TEMPLATE_DATA_DIR: $CERTS_TEMPLATE_DATA_DIR
+  TMP_GEN_DIR: $CERTS_TMP_DIR
+  CERT_PRIVATE_DIR: $certs_template_dir
+  CERT_FILENAME: $CERTS_LOCAL_FILENAME
+  CERTS_ARE_CALLED: $CERTS_LABEL_SINGULAR
+  CERTS_ARE_CALLED_PLURAL: $CERTS_LABEL_PLURAL
 
 certs_auth_config:
   QUEUE_USER: $CERTS_QUEUE_USER
