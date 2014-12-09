@@ -29,31 +29,35 @@
       devstack: false
     - role: nginx
       nginx_sites:
-        - xqueue
-        - basic-auth
+      - xqueue
+      - basic-auth
       tags:
-        - nginx
+      - nginx
     - role: xqueue
       xqueue_create_db: "no"
       xqueue_create_users: false
       tags:
-        - xqueue
-    - datadog
+      - xqueue
+    - role: datadog
 
-#- name: run the certificate agent on the first util machine only
-#  hosts: ~tag_Name_util1_prod
-#  sudo: True
-#  vars:
-#    secure_dir: '../../../edx-secret/ansible'
-#    migrate_db: "no"
-#  vars_files:
-#    - "roles/common/defaults/main.yml"
+- name: run the certificate agent on the first util machine only
+  hosts: ~tag_Name_util1_prod
+  sudo: True
+  gather_facts: True
+  vars:
+    secure_dir: '../../../edx-secret/ansible'
+    local_dir: "{{secure_dir}}/local"
+    migrate_db: "no"
+  vars_files:
+    - "roles/common/defaults/main.yml"
 #    - "roles/supervisor/defaults/main.yml"
-#    - "{{ secure_dir }}/vars/edxapp_prod_vars.yml"
-#    - "{{ secure_dir }}/vars/certs_prod_vars.yml"
-#  roles:
-#    - role: certs
-#      tags: certs
+    - "{{ secure_dir }}/vars/edxapp_prod_vars.yml"
+    - "{{ secure_dir }}/vars/certs_prod_vars.yml"
+  roles:
+    - role: supervisor
+      tags: certs
+    - role: certs
+      tags: certs
 
 - name: run the notifier on the second util machine only
   hosts: ~tag_Name_util2_prod

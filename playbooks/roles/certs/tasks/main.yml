@@ -99,4 +99,4 @@
   when: certs_gpg_key.changed
   notify: restart certs
 
-- include: deploy.yml tags=deploy
+- include: deploy.yml tags=certs
